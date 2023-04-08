@@ -3,7 +3,7 @@
     height: 85px;
     display: flex; 
     flex-direction: column;
-    align-items: center;   
+    align-items: center;  
     box-shadow: 0px 1px 3px rgba(192, 192, 192, 0.5);
 }
 
@@ -45,7 +45,7 @@
 .menu {
     z-index: 10;
     width: 1150px;
-    height: 50px;
+    height: 50px; 
 }
 
 .menu-bar {
@@ -53,6 +53,11 @@
     align-items: center;
     justify-content: space-between;
     height: 50px;
+}
+
+.menu-main {
+    display: flex;
+    align-items: center;
 }
 
 .logo {
@@ -75,11 +80,25 @@
     list-style: none;
     text-transform: uppercase;
     font-weight: 700;
-    color: black;
     margin: 0 20px;
-    font-size: 1.7rem;
+    font-size: 1.6rem;
+    color: black;
 }
 
 .menu-item:hover {
     color: var(--primary);
+}
+
+.btn-login {
+    border-radius: 4px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(254, 44, 85);
+    padding: 6px 15px;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    color: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), rgb(254, 44, 85);
 }

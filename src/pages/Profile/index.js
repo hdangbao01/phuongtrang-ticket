@@ -1,9 +1,28 @@
 import classNames from 'classnames/bind'
 import styles from './Profile.module.css'
+import { useEffect, useState } from 'react'
 
 const cx = classNames.bind(styles)
 
 function Profile() {
+    const [users, setUsers] = useState([])
+    const user = localStorage.getItem("user");
+
+    console.log(users);
+
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/users`)
+            .then(res => res.json())
+            .then(res => {
+                setUsers(res)
+            })
+    }, [])
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        window.location="/"
+    }
+
     return (
         <div className={cx('content-pro5')}>
             <div className={cx('infor')}>
@@ -21,7 +40,9 @@ function Profile() {
             </div>
             <div className={cx('mana')}>
                 <div className={cx('contact-info')}>
-                    <h1>Nguyễn Văn IVan</h1>
+                {users.map(u => (
+                    (user === u.username && <h1>{u.username}</h1> )
+                ))}                    
                     <p>Nhân viên thu vé</p>
                 </div>
                 <div className={cx('contact-info1')}>
@@ -50,7 +71,7 @@ function Profile() {
                         <input className={cx('input-info')} value='Không xác định' />
                     </div>
                 </div>
-                <button className={cx('btn-pro5')}>Lưu</button>
+                <button className={cx('btn-pro5')} onClick={handleLogout}>Lưu</button>
             </div>            
         </div>
     )
