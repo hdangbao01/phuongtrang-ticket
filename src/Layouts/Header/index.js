@@ -1,12 +1,16 @@
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import styles from './Header.module.css'
-import { useState } from 'react'
 
 const cx = classNames.bind(styles)
 
 function Header() {
-    const user = localStorage.getItem("user");
+    const user = localStorage.getItem("user");   
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        window.location="/"
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -31,12 +35,15 @@ function Header() {
                         </ul>
                     </div>
                     <div className={cx('about-contry')}>
-                        {!!user && <Link to='/profile' style={{ textDecoration: 'none' }}>
-                            <li className={cx('menu-item')}>Trang cá nhân</li>
-                        </Link>}
-                        
+                        {!!user && <div className={cx('menu-user')}>
+                            <Link to='/profile' style={{ textDecoration: 'none' }}>
+                                <div className={cx('menu-item')}>Trang cá nhân</div>
+                            </Link>
+                            <button className={cx('menu-item', 'btn-logout')} onClick={handleLogout}>Đăng xuất</button>
+                        </div>}
+
                         {!user && <Link to='/login' style={{ textDecoration: 'none' }}>
-                            <li className={cx('menu-item', 'btn-login')}>Đăng nhập</li>
+                            <button className={cx('menu-item', 'btn-login')}>Đăng nhập</button>
                         </Link>}
                     </div>
                 </div>
