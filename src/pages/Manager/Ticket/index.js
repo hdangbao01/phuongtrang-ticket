@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
 
 function Ticket() {
-    const [ticket, setTicket] = useState({})
+    const [userLogin, setUserLogin] = useState({})
+    const [ticket, setTicket] = useState('')
     const [listTicket, setListTicket] = useState([])
     const [listTrip, setListTrip] = useState([])
     const [listBus, setListBus] = useState([])
@@ -16,8 +17,16 @@ function Ticket() {
     const [pay, setPay] = useState('')
     const [trip, setTrip] = useState('')
     const [seat, setSeat] = useState('')
+    const [ticketdlt, setTicketdlt] = useState('')
 
     useEffect(() => {
+        fetch(`http://localhost:3000/employee`)
+            .then((res) => res.json())
+            .then((res) => {
+                setUserLogin(res)
+                console.log(res[0])
+            })
+
         fetch(`http://localhost:3000/ticket`)
             .then((res) => res.json())
             .then((res) => {
@@ -46,17 +55,50 @@ function Ticket() {
             body: JSON.stringify(ticket)
         }
 
-        fetch(`https://jsonplaceholder.typicode.com/posts`, options)
-            .then((res) => res.json())
+        if (ticket) {
+            fetch(`http://localhost:3000/ticket`, options)
+                .then((res) => res.json())
+                .then(() => {
+                    alert("Them ve thanh cong")
+                    window.location="/manager"
+                })
+        }
     }, [ticket])
 
+    useEffect(() => {
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        if (ticketdlt) {
+            fetch('http://localhost:3000/ticket/' + ticketdlt, options)
+                .then((res) => res.json())
+                .then(() => {
+                    alert(`Xoa ve ${ticketdlt} thanh cong`)
+                    window.location="/manager"
+                })
+        }
+    }, [ticketdlt])
+
     const handleAddTicket = () => {
-        setTicket({ title: name, body: phone })
-    }    
+        setTicket({        
+            TripId: trip,
+            PassengerName: name, 
+            PassengerPhone: phone,
+            SeatNumber: '01',
+            Price: "1000000",
+            Payment: pay,
+            DataOfPurchase: "11/04",
+            EmployeeId: userLogin[0].EmployeeName
+        })
+    }
 
     const handleSeclectTrip = (e) => {
         setTrip(e.target.value)
-    }   
+    }
 
     useEffect(() => {
         const curSeat = listBus.find(itemBus => {
@@ -75,8 +117,8 @@ function Ticket() {
                 {listTrip.map(itemTrip => (
                     <p className={cx('trip')} key={itemTrip.BusId}><span>* Chuyến {itemTrip.id}:</span><br />
                         - Địa điểm đón: {itemTrip.StartPoint}<br />
-                        - Địa điểm đến: {itemTrip.StartDate}<br />
-                        - Giờ xuất phát: {itemTrip.EndPoint}<br />
+                        - Địa điểm đến: {itemTrip.EndPoint}<br />
+                        - Giờ xuất phát: {itemTrip.StartDate}<br />
                         - Giờ đến: {itemTrip.EndDate}<br />
                     </p>
                 ))}
@@ -89,7 +131,7 @@ function Ticket() {
                 <select className={cx('input-info')} value={trip} onChange={e => handleSeclectTrip(e)}>
                     <option value=''>-- Chọn chuyến xe --</option>
                     {listTrip.map(itemTrip => (
-                        <option key={itemTrip.BusId} value={itemTrip.BusId}>{itemTrip.StartPoint} - {itemTrip.StartDate}</option>
+                        <option key={itemTrip.BusId} value={itemTrip.BusId}>{`Chuyến ${itemTrip.BusId} (${itemTrip.StartPoint} - ${itemTrip.StartDate})`}</option>
                     ))}
                 </select>
                 <select className={cx('input-info')}>
@@ -106,7 +148,7 @@ function Ticket() {
                 </select>
                 <button className={cx('btn-pro5')} onClick={handleAddTicket}>Thêm vé</button>
             </div>
-            <h3 className={cx('table-title')}>Tất cả vé {trip}</h3>
+            <h3 className={cx('table-title')}>Tất cả vé</h3>
             <div className={cx('table-ticket')}>
                 <ul className={cx('table-list')}>
                     <li className={cx('table-item')}>Mã vé</li>
@@ -127,7 +169,9 @@ function Ticket() {
                         <li className={cx('table-item')}>{itemTicket.SeatNumber}</li>
                         <li className={cx('table-item')}>{itemTicket.Payment}</li>
                         <li className={cx('table-item')}>{itemTicket.EmployeeId}</li>
-                        <li className={cx('table-item')}>Xoá</li>
+                        <li className={cx('table-item')}>
+                            <button className={cx('btn-delete')} onClick={() => setTicketdlt(itemTicket.id)}>Xoá</button>
+                        </li>
                     </ul>
                 ))}
             </div>

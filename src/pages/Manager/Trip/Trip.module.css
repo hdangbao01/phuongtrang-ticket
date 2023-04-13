@@ -38,7 +38,7 @@
 
 .btn-pro5 {
     float: right;
-    width: 150px;
+    width: 100%;
     cursor: pointer;
     background: rgb(13, 122, 95);
     outline: 0px;
@@ -91,7 +91,7 @@
 }
 
 .table-item {
-    width: calc(100% / 5);
+    width: calc(100% / 7);
     border-right: 1px solid black;
     padding: 4px;    
     align-items: center;

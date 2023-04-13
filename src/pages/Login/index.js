@@ -11,7 +11,7 @@ function Login() {
     const [userLogin, setUserLogin] = useState(false)
 
     useEffect(() => {
-        fetch(`https://jsonplaceholder.typicode.com/users`)
+        fetch(`http://localhost:3000/employee`)
             .then(res => res.json())
             .then(res => {
                 setUsers(res)
@@ -29,7 +29,7 @@ function Login() {
 
     const handleLogin = () => {
         users.map((user) => (
-            (user.username === username && user.username === pass && setUserLogin(true) )
+            (user.Username === username && user.Passwork === pass && setUserLogin(true) )
         ))
     }
 

@@ -1,32 +1,45 @@
 import classNames from 'classnames/bind'
 import styles from './Manager.module.css'
 import { IoTicketOutline, IoBusOutline } from "react-icons/io5";
+import { BiTrip } from "react-icons/bi";
 import { useEffect, useState, useRef } from 'react'
 import Ticket from './Ticket';
 import Bus from './Bus';
+import Trip from './Trip';
 
 const cx = classNames.bind(styles)
 
 function Manager() {
     const [menuTicket, setMenuTicket] = useState(true)
     const [menuBus, setMenuBus] = useState(false)
+    const [menuTrip, setMenuTrip] = useState(false)
 
     const ticketRef = useRef()
     const busRef = useRef()
+    const tripRef = useRef()
 
     useEffect(() => {
         const handleMenuTicket = () => {
             setMenuTicket(true)
             setMenuBus(false)
+            setMenuTrip(false)
         }
     
         const handleMenuBus = () => {
             setMenuTicket(false)
             setMenuBus(true)
+            setMenuTrip(false)
+        }    
+
+        const handleMenuTrip = () => {
+            setMenuTicket(false)
+            setMenuBus(false)
+            setMenuTrip(true)
         }    
 
         ticketRef.current.addEventListener('click', handleMenuTicket)
         busRef.current.addEventListener('click', handleMenuBus)        
+        tripRef.current.addEventListener('click', handleMenuTrip)        
     }, [])
 
     return (
@@ -43,6 +56,9 @@ function Manager() {
                         <li ref={busRef} className={cx('manager-item', (menuBus && 'active'))}>
                             <IoBusOutline className={cx('manager-icon')} />Tất cả xe khách
                         </li>
+                        <li ref={tripRef} className={cx('manager-item', (menuTrip && 'active'))}>
+                            <BiTrip className={cx('manager-icon')} />Tất cả chuyến xe
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -51,6 +67,7 @@ function Manager() {
                 <div className={cx('contact-info1')}>                    
                     {menuTicket && <Ticket />}
                     {menuBus && <Bus />}
+                    {menuTrip && <Trip />}
                 </div>
             </div>
         </div>

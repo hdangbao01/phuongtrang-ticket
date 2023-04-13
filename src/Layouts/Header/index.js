@@ -16,7 +16,7 @@ function Header() {
         <div className={cx('wrapper')}>
             <header className={cx('header')}>
                 <div className={cx('about')}>
-                    <marquee dicrection="scroll" className={cx('about-text')}>Website quản lý vé xe khách Phương Trang - CHẤT LƯỢNG LÀ DANH DỰ</marquee>
+                    <marquee dicrection="scroll" className={cx('about-text')}>Website quản lý CTY cổ phần xe khách Phương Trang - CHẤT LƯỢNG LÀ DANH DỰ</marquee>
                 </div>
             </header>
             <div className={cx('menu')}>
