@@ -17,20 +17,27 @@ function Ticket() {
     const [pay, setPay] = useState('')
     const [trip, setTrip] = useState('')
     const [seat, setSeat] = useState('')
+    const [seats, setSeats] = useState('')
+    const [seatEmp, setSeatEmp] = useState([])
+    const [listSeatEmp, setListSeatEmp] = useState([])
+    const [tripArr, setTripArr] = useState([])
     const [ticketdlt, setTicketdlt] = useState('')
 
-    useEffect(() => {
-        fetch(`http://localhost:3000/employee`)
-            .then((res) => res.json())
-            .then((res) => {
-                setUserLogin(res)
-                console.log(res[0])
-            })
-
+    const getListTicket = () => {
         fetch(`http://localhost:3000/ticket`)
             .then((res) => res.json())
             .then((res) => {
                 setListTicket(res)
+            })
+    }
+
+    useEffect(() => {
+        getListTicket()
+
+        fetch(`http://localhost:3000/employee`)
+            .then((res) => res.json())
+            .then((res) => {
+                setUserLogin(res)
             })
 
         fetch(`http://localhost:3000/trip`)
@@ -60,7 +67,12 @@ function Ticket() {
                 .then((res) => res.json())
                 .then(() => {
                     alert("Them ve thanh cong")
-                    window.location="/manager"
+                    getListTicket()
+                    setTrip('')
+                    setName('')
+                    setPhone('')
+                    setSeat('')
+                    setPay('')
                 })
         }
     }, [ticket])
@@ -78,20 +90,24 @@ function Ticket() {
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoa ve ${ticketdlt} thanh cong`)
-                    window.location="/manager"
+                    getListTicket()
                 })
         }
     }, [ticketdlt])
 
     const handleAddTicket = () => {
-        setTicket({        
+        const today = new Date()
+
+        var date = today.getDate() + '/' + (today.getMonth() + 1)
+
+        setTicket({
             TripId: trip,
-            PassengerName: name, 
+            PassengerName: name,
             PassengerPhone: phone,
-            SeatNumber: '01',
+            SeatNumber: seat,
             Price: "1000000",
             Payment: pay,
-            DataOfPurchase: "11/04",
+            DataOfPurchase: date,
             EmployeeId: userLogin[0].EmployeeName
         })
     }
@@ -101,14 +117,36 @@ function Ticket() {
     }
 
     useEffect(() => {
-        const curSeat = listBus.find(itemBus => {
+        const seatCur = listBus.find(itemBus => {
             return itemBus.id == trip
         })
-        console.log(curSeat)
 
-        setSeat(curSeat)
-        console.log(seat)
+        if (seatCur) {
+            setSeats(seatCur.Capacity)
+
+            let seatList = []
+            const tripCurs = listTicket.filter(itemTicket => {
+                return itemTicket.TripId == trip
+            })
+            tripCurs.forEach((tripCur) => {
+                seatList.push(tripCur.SeatNumber)
+            })
+            setTripArr(seatList);
+        }
     }, [trip])
+
+    useEffect(() => {
+        let seatEmpty = []
+        for (let i = 1; i <= seats; i++) {
+            seatEmpty.push(i)
+        }
+        setSeatEmp(seatEmpty)
+    }, [seats])
+
+    useEffect(() => {
+        const filteredSeat = seatEmp.filter(itemEmp => !tripArr.includes(itemEmp))
+        setListSeatEmp(filteredSeat)
+    }, [seatEmp])
 
     return (
         <div>
@@ -131,13 +169,15 @@ function Ticket() {
                 <select className={cx('input-info')} value={trip} onChange={e => handleSeclectTrip(e)}>
                     <option value=''>-- Chọn chuyến xe --</option>
                     {listTrip.map(itemTrip => (
-                        <option key={itemTrip.BusId} value={itemTrip.BusId}>{`Chuyến ${itemTrip.BusId} (${itemTrip.StartPoint} - ${itemTrip.StartDate})`}</option>
+                        <option key={itemTrip.BusId} value={itemTrip.BusId}>{`Chuyến ${itemTrip.BusId} (${itemTrip.StartPoint} - ${itemTrip.EndPoint})`}</option>
                     ))}
                 </select>
-                <select className={cx('input-info')}>
-                    <option>-- Chọn ghế --</option>
-                    {/* {seat.Capacity} */}
-                    {trip && <option>1</option>}
+                <select className={cx('input-info')} value={seat} onChange={e => setSeat(Number(e.target.value))}>
+                    <option value=''>-- Chọn ghế --</option>
+                    {trip &&
+                        listSeatEmp.map(itemSeatEmp => (
+                            <option key={itemSeatEmp}>{itemSeatEmp}</option>
+                        ))}
                 </select>
             </div>
             <div className={cx('block')}>

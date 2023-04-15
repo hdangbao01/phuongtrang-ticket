@@ -10,6 +10,8 @@ import Trip from './Trip';
 const cx = classNames.bind(styles)
 
 function Manager() {
+    const user = localStorage.getItem("user");
+
     const [menuTicket, setMenuTicket] = useState(true)
     const [menuBus, setMenuBus] = useState(false)
     const [menuTrip, setMenuTrip] = useState(false)
@@ -24,22 +26,22 @@ function Manager() {
             setMenuBus(false)
             setMenuTrip(false)
         }
-    
+
         const handleMenuBus = () => {
             setMenuTicket(false)
             setMenuBus(true)
             setMenuTrip(false)
-        }    
+        }
 
         const handleMenuTrip = () => {
             setMenuTicket(false)
             setMenuBus(false)
             setMenuTrip(true)
-        }    
+        }
 
         ticketRef.current.addEventListener('click', handleMenuTicket)
-        busRef.current.addEventListener('click', handleMenuBus)        
-        tripRef.current.addEventListener('click', handleMenuTrip)        
+        busRef.current.addEventListener('click', handleMenuBus)
+        tripRef.current.addEventListener('click', handleMenuTrip)
     }, [])
 
     return (
@@ -64,10 +66,12 @@ function Manager() {
             </div>
 
             <div className={cx('mana')}>
-                <div className={cx('contact-info1')}>                    
-                    {menuTicket && <Ticket />}
-                    {menuBus && <Bus />}
-                    {menuTrip && <Trip />}
+                <div className={cx('contact-info1')}>
+                    {user ? <div>
+                        {menuTicket && <Ticket />}
+                        {menuBus && <Bus />}
+                        {menuTrip && <Trip />}
+                    </div> : <div>Vui lòng đăng nhập để quản lý</div>}
                 </div>
             </div>
         </div>

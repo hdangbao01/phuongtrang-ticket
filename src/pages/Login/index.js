@@ -29,7 +29,7 @@ function Login() {
 
     const handleLogin = () => {
         users.map((user) => (
-            (user.Username === username && user.Passwork === pass && setUserLogin(true) )
+            (user.Username === username && user.Password === pass && setUserLogin(true) )
         ))
     }
 

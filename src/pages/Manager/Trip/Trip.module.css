@@ -17,7 +17,8 @@
     align-items: center;
 }
 
-.input-info {
+.input-info,
+.time {
     flex: 1;
     width: 350px;
     height: 40px;
@@ -34,6 +35,14 @@
 
 .input-info:nth-child(2){
     margin-left: 10px;
+}
+
+.time {
+    width: 400px;
+}
+
+.time-end {
+    margin-left: 20px;
 }
 
 .btn-pro5 {

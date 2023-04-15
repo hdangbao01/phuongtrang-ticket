@@ -9,6 +9,7 @@ const cx = classNames.bind(styles)
 function Trip() {
     const [trip, setTrip] = useState('')
     const [busId, setBusId] = useState('')
+    const [tripId, setTripId] = useState('')
     const [startPoint, setStartPoint] = useState('')
     const [endPoint, setEndPoint] = useState('')
     const [startDate, setStartDate] = useState('')
@@ -16,12 +17,16 @@ function Trip() {
     const [tripdlt, setTripdlt] = useState('')
     const [listTrip, setListTrip] = useState([])
 
-    useEffect(() => {
+    const getListTrip = () => {
         fetch(`http://localhost:3000/trip`)
             .then((res) => res.json())
             .then((res) => {
                 setListTrip(res)
             })
+    }
+
+    useEffect(() => {
+        getListTrip()
     }, [])
 
     useEffect(() => {
@@ -36,9 +41,10 @@ function Trip() {
         if (trip) {
             fetch(`http://localhost:3000/trip`, options)
                 .then((res) => res.json())
-                .then(() => {
+                .then((res) => {
                     alert("Thêm chuyến thành công")
-                    window.location = "/manager"
+                    console.log(trip)
+                    getListTrip()
                 })
         }
     }, [trip])
@@ -56,13 +62,14 @@ function Trip() {
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoá chuyến ${tripdlt} thành công`)
-                    window.location = "/manager"
+                    getListTrip()
                 })
         }
     }, [tripdlt])
 
     const handleAddBus = () => {
         setTrip({
+            id: tripId,
             BusId: busId,
             StartPoint: startPoint,
             StartDate: startDate,
@@ -75,6 +82,9 @@ function Trip() {
         <div>
             <p className={cx('contact-header')}><IoHome className={cx('contact-icon')} /> <GrFormNext /> Quản lý chuyến xe</p>
             <div className={cx('block')}>
+                <input required className={cx('input-info')} placeholder="Mã chuyến.."
+                    value={tripId} onChange={e => { setTripId(e.target.value) }}
+                />
                 <input className={cx('input-info')} placeholder="Mã xe khách.."
                     value={busId} onChange={e => { setBusId(e.target.value) }}
                 />
@@ -88,12 +98,18 @@ function Trip() {
                 />
             </div>
             <div className={cx('block')}>
-                <input className={cx('input-info')} placeholder="Thời gian đón..."
-                    value={startDate} onChange={e => { setStartDate(e.target.value) }}
-                />
-                <input className={cx('input-info')} placeholder="Thời gian đến..."
-                    value={endDate} onChange={e => { setEndDate(e.target.value) }}
-                />
+                <div>
+                    <label>Thời gian đón:</label>
+                    <input id='timeStart' className={cx('time')} type="time" placeholder="Thời gian đón..."
+                        value={startDate} onChange={e => { setStartDate(e.target.value) }}
+                    />
+                </div>
+                <div>
+                    <label className={cx('time-end')} >Thời gian đến:</label>
+                    <input id='timeEnd' className={cx('time', 'time-end')} type="time"
+                        value={endDate} onChange={e => { setEndDate(e.target.value) }}
+                    />
+                </div>
             </div>
             <div className={cx('block')}>
                 <button className={cx('btn-pro5')} onClick={handleAddBus}>Thêm chuyến</button>

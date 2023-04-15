@@ -14,12 +14,16 @@ function Bus() {
     const [busdlt, setBusdlt] = useState('')
     const [listBus, setListBus] = useState([])
 
-    useEffect(() => {
+    const getListBus = () => {
         fetch(`http://localhost:3000/bus`)
             .then((res) => res.json())
             .then((res) => {
                 setListBus(res)
             })
+    }
+
+    useEffect(() => {
+        getListBus()
     }, [])
 
     useEffect(() => {
@@ -36,7 +40,7 @@ function Bus() {
                 .then((res) => res.json())
                 .then(() => {
                     alert("Them xe thanh cong")
-                    window.location="/manager"
+                    getListBus()
                 })
         }
     }, [bus])
@@ -54,7 +58,7 @@ function Bus() {
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoa ve ${busdlt} thanh cong`)
-                    window.location="/manager"
+                    getListBus()
                 })
         }
     }, [busdlt])
@@ -72,20 +76,20 @@ function Bus() {
             <p className={cx('contact-header')}><IoHome className={cx('contact-icon')} /> <GrFormNext /> Quản lý xe khách</p>
             <div className={cx('block')}>
                 <input className={cx('input-info')} placeholder="Thương hiệu xe.."
-                 value={brand} onChange={e => { setBrand(e.target.value) }} 
+                    value={brand} onChange={e => { setBrand(e.target.value) }}
                 />
                 <input className={cx('input-info')} placeholder="Số ghế..."
-                value={seatNumber} onChange={e => { setSeatNumber(e.target.value) }} 
+                    value={seatNumber} onChange={e => { setSeatNumber(e.target.value) }}
                 />
             </div>
             <div className={cx('block')}>
-            <input className={cx('input-info')} placeholder="Loại xe..."
-                value={type} onChange={e => { setType(e.target.value) }} 
+                <input className={cx('input-info')} placeholder="Loại xe..."
+                    value={type} onChange={e => { setType(e.target.value) }}
                 />
-                <button className={cx('btn-pro5')} onClick={handleAddBus}>Thêm vé</button>
+                <button className={cx('btn-pro5')} onClick={handleAddBus}>Thêm xe</button>
             </div>
             <div className={cx('block')}>
-                
+
             </div>
             <h3 className={cx('table-title')}>Tất cả xe khách</h3>
             <div className={cx('table-ticket')}>
