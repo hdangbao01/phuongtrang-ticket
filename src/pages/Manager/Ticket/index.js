@@ -24,7 +24,7 @@ function Ticket() {
     const [ticketdlt, setTicketdlt] = useState('')
 
     const getListTicket = () => {
-        fetch(`http://localhost:3000/ticket`)
+        fetch(`http://127.0.0.1:8000/ticket`)
             .then((res) => res.json())
             .then((res) => {
                 setListTicket(res)
@@ -34,19 +34,19 @@ function Ticket() {
     useEffect(() => {
         getListTicket()
 
-        fetch(`http://localhost:3000/employee`)
+        fetch(`http://127.0.0.1:8000/employee`)
             .then((res) => res.json())
             .then((res) => {
                 setUserLogin(res)
             })
 
-        fetch(`http://localhost:3000/trip`)
+        fetch(`http://127.0.0.1:8000/trip`)
             .then((res) => res.json())
             .then((res) => {
                 setListTrip(res)
             })
 
-        fetch(`http://localhost:3000/bus`)
+        fetch(`http://127.0.0.1:8000/bus`)
             .then((res) => res.json())
             .then((res) => {
                 setListBus(res)
@@ -63,7 +63,7 @@ function Ticket() {
         }
 
         if (ticket) {
-            fetch(`http://localhost:3000/ticket`, options)
+            fetch(`http://127.0.0.1:8000/ticket`, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert("Them ve thanh cong")
@@ -86,7 +86,7 @@ function Ticket() {
         }
 
         if (ticketdlt) {
-            fetch('http://localhost:3000/ticket/' + ticketdlt, options)
+            fetch('http://127.0.0.1:8000/ticket/' + ticketdlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoa ve ${ticketdlt} thanh cong`)
@@ -118,7 +118,7 @@ function Ticket() {
 
     useEffect(() => {
         const seatCur = listBus.find(itemBus => {
-            return itemBus.id == trip
+            return itemBus.BusId == trip
         })
 
         if (seatCur) {
@@ -153,7 +153,7 @@ function Ticket() {
             <p className={cx('contact-header')}><IoHome className={cx('contact-icon')} /> <GrFormNext /> Quản lý vé xe</p>
             <div className={cx('block-trip')}>
                 {listTrip.map(itemTrip => (
-                    <p className={cx('trip')} key={itemTrip.BusId}><span>* Chuyến {itemTrip.id}:</span><br />
+                    <p className={cx('trip')} key={itemTrip.BusId}><span>* Chuyến {itemTrip.TripId}:</span><br />
                         - Địa điểm đón: {itemTrip.StartPoint}<br />
                         - Địa điểm đến: {itemTrip.EndPoint}<br />
                         - Giờ xuất phát: {itemTrip.StartDate}<br />
@@ -201,8 +201,8 @@ function Ticket() {
                     <li className={cx('table-item')}>Thao tác</li>
                 </ul>
                 {listTicket.map(itemTicket => (
-                    <ul className={cx('table-list')} key={itemTicket.id}>
-                        <li className={cx('table-item')}>{itemTicket.id}</li>
+                    <ul className={cx('table-list')} key={itemTicket.TicketId}>
+                        <li className={cx('table-item')}>{itemTicket.TicketId}</li>
                         <li className={cx('table-item')}>{itemTicket.PassengerName}</li>
                         <li className={cx('table-item')}>{itemTicket.PassengerPhone}</li>
                         <li className={cx('table-item')}>{itemTicket.TripId}</li>
@@ -210,7 +210,7 @@ function Ticket() {
                         <li className={cx('table-item')}>{itemTicket.Payment}</li>
                         <li className={cx('table-item')}>{itemTicket.EmployeeId}</li>
                         <li className={cx('table-item')}>
-                            <button className={cx('btn-delete')} onClick={() => setTicketdlt(itemTicket.id)}>Xoá</button>
+                            <button className={cx('btn-delete')} onClick={() => setTicketdlt(itemTicket.TicketId)}>Xoá</button>
                         </li>
                     </ul>
                 ))}

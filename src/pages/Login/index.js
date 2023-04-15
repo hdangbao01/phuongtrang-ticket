@@ -11,7 +11,7 @@ function Login() {
     const [userLogin, setUserLogin] = useState(false)
 
     useEffect(() => {
-        fetch(`http://localhost:3000/employee`)
+        fetch(`http://127.0.0.1:8000/employee`)
             .then(res => res.json())
             .then(res => {
                 setUsers(res)

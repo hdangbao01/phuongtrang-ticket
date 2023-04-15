@@ -14,11 +14,11 @@ function Profile() {
     const user = localStorage.getItem("user");
 
     useEffect(() => {
-        fetch(`http://localhost:3000/employee`)
+        fetch(`http://127.0.0.1:8000/employee`)
             .then(res => res.json())
             .then(res => {
                 setUsers(res)
-                setIdUser(res[0].id);
+                setIdUser(res[0].EmployeeId);
             })
     }, [])
 
@@ -45,7 +45,7 @@ function Profile() {
 
     const handleUpdateInfor = () => {
         setInfor({
-            id: idUser,
+            EmployeeId: idUser,
             Username: email,
             Password: users[0].Password,
             EmployeeName: name,
@@ -58,7 +58,7 @@ function Profile() {
     return (
         <div className={cx('wwrapper')}>
             {users.map(u => (
-                user === u.Username && <div className={cx('content-pro5')} key={u.id} >
+                user === u.Username && <div className={cx('content-pro5')} key={u.EmployeeId} >
                     <div className={cx('infor')}>
                         <img className={cx('avatar')} src="https://cornerstoneia.com/wp-content/uploads/2019/08/avatar-placeholder.jpeg" alt='avatar'></img>
                         <div className={cx('left-info')}>

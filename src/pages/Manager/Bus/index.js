@@ -15,7 +15,7 @@ function Bus() {
     const [listBus, setListBus] = useState([])
 
     const getListBus = () => {
-        fetch(`http://localhost:3000/bus`)
+        fetch(`http://127.0.0.1:8000/bus`)
             .then((res) => res.json())
             .then((res) => {
                 setListBus(res)
@@ -36,7 +36,7 @@ function Bus() {
         }
 
         if (bus) {
-            fetch(`http://localhost:3000/bus`, options)
+            fetch(`http://127.0.0.1:8000/bus`, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert("Them xe thanh cong")
@@ -54,7 +54,7 @@ function Bus() {
         }
 
         if (busdlt) {
-            fetch('http://localhost:3000/bus/' + busdlt, options)
+            fetch('http://127.0.0.1:8000/bus/' + busdlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoa ve ${busdlt} thanh cong`)
@@ -101,13 +101,13 @@ function Bus() {
                     <li className={cx('table-item')}>Thao tác</li>
                 </ul>
                 {listBus.map(itemBus => (
-                    <ul className={cx('table-list')} key={itemBus.id}>
-                        <li className={cx('table-item')}>{itemBus.id}</li>
+                    <ul className={cx('table-list')} key={itemBus.BusId}>
+                        <li className={cx('table-item')}>{itemBus.BusId}</li>
                         <li className={cx('table-item')}>{itemBus.Brand}</li>
                         <li className={cx('table-item')}>{itemBus.Type}</li>
                         <li className={cx('table-item')}>{itemBus.Capacity}</li>
                         <li className={cx('table-item')}>
-                            <button className={cx('btn-delete')} onClick={() => setBusdlt(itemBus.id)}>Xoá</button>
+                            <button className={cx('btn-delete')} onClick={() => setBusdlt(itemBus.BusId)}>Xoá</button>
                         </li>
                     </ul>
                 ))}

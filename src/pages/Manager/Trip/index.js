@@ -18,7 +18,7 @@ function Trip() {
     const [listTrip, setListTrip] = useState([])
 
     const getListTrip = () => {
-        fetch(`http://localhost:3000/trip`)
+        fetch(`http://127.0.0.1:8000/trip`)
             .then((res) => res.json())
             .then((res) => {
                 setListTrip(res)
@@ -39,7 +39,7 @@ function Trip() {
         }
 
         if (trip) {
-            fetch(`http://localhost:3000/trip`, options)
+            fetch(`http://127.0.0.1:8000/trip`, options)
                 .then((res) => res.json())
                 .then((res) => {
                     alert("Thêm chuyến thành công")
@@ -58,7 +58,7 @@ function Trip() {
         }
 
         if (tripdlt) {
-            fetch('http://localhost:3000/trip/' + tripdlt, options)
+            fetch('http://127.0.0.1:8000/trip/' + tripdlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoá chuyến ${tripdlt} thành công`)
@@ -69,7 +69,7 @@ function Trip() {
 
     const handleAddBus = () => {
         setTrip({
-            id: tripId,
+            TripId: tripId,
             BusId: busId,
             StartPoint: startPoint,
             StartDate: startDate,
@@ -126,15 +126,15 @@ function Trip() {
                     <li className={cx('table-item')}>Thao tác</li>
                 </ul>
                 {listTrip.map(itemTrip => (
-                    <ul className={cx('table-list')} key={itemTrip.id}>
-                        <li className={cx('table-item')}>{itemTrip.id}</li>
+                    <ul className={cx('table-list')} key={itemTrip.TripId}>
+                        <li className={cx('table-item')}>{itemTrip.TripId}</li>
                         <li className={cx('table-item')}>{itemTrip.BusId}</li>
                         <li className={cx('table-item')}>{itemTrip.StartPoint}</li>
                         <li className={cx('table-item')}>{itemTrip.EndPoint}</li>
                         <li className={cx('table-item')}>{itemTrip.StartDate}</li>
                         <li className={cx('table-item')}>{itemTrip.EndDate}</li>
                         <li className={cx('table-item')}>
-                            <button className={cx('btn-delete')} onClick={() => setTripdlt(itemTrip.id)}>Xoá</button>
+                            <button className={cx('btn-delete')} onClick={() => setTripdlt(itemTrip.TripId)}>Xoá</button>
                         </li>
                     </ul>
                 ))}
