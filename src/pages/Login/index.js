@@ -28,7 +28,7 @@ function Login() {
     }
 
     const handleLogin = () => {
-        users.map((user) => (
+        users.find((user) => (
             (user.Username === username && user.Password === pass && setUserLogin(true) )
         ))
     }

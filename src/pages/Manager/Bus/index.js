@@ -101,13 +101,13 @@ function Bus() {
                     <li className={cx('table-item')}>Thao tác</li>
                 </ul>
                 {listBus.map(itemBus => (
-                    <ul className={cx('table-list')} key={itemBus.BusId}>
-                        <li className={cx('table-item')}>{itemBus.BusId}</li>
+                    <ul className={cx('table-list')} key={itemBus.id}>
+                        <li className={cx('table-item')}>{itemBus.id}</li>
                         <li className={cx('table-item')}>{itemBus.Brand}</li>
                         <li className={cx('table-item')}>{itemBus.Type}</li>
                         <li className={cx('table-item')}>{itemBus.Capacity}</li>
                         <li className={cx('table-item')}>
-                            <button className={cx('btn-delete')} onClick={() => setBusdlt(itemBus.BusId)}>Xoá</button>
+                            <button className={cx('btn-delete')} onClick={() => setBusdlt(itemBus.id)}>Xoá</button>
                         </li>
                     </ul>
                 ))}

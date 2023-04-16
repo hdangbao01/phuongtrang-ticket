@@ -18,7 +18,7 @@ function Profile() {
             .then(res => res.json())
             .then(res => {
                 setUsers(res)
-                setIdUser(res[0].EmployeeId);
+                setIdUser(res[0].id);
             })
     }, [])
 
@@ -32,7 +32,7 @@ function Profile() {
         }
 
         if (infor) {
-            fetch(`http://localhost:3000/employee`, options)
+            fetch(`http://127.0.0.1:8000/employee`, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert("Sửa thông tin thành công")
@@ -40,31 +40,34 @@ function Profile() {
                     localStorage.setItem("user", email)
                     window.location='/profile'
                 })
+                .catch(() => {
+                    alert("Sửa thông tin thất bại")
+                })
         }
     }, [infor])
 
     const handleUpdateInfor = () => {
         setInfor({
-            EmployeeId: idUser,
+            id: idUser,
             Username: email,
             Password: users[0].Password,
             EmployeeName: name,
-            EmployeePhone: phone,
-            EmployeePositon: users[0].EmployeePositon,
-            Salary: users[0].Salary
+            EmployeePhone: Number(phone),
+            EmployeePosition: users[0].EmployeePosition,
+            Salary: Number(users[0].Salary)
         })
     }
 
     return (
         <div className={cx('wwrapper')}>
             {users.map(u => (
-                user === u.Username && <div className={cx('content-pro5')} key={u.EmployeeId} >
+                user === u.Username && <div className={cx('content-pro5')} key={u.id} >
                     <div className={cx('infor')}>
                         <img className={cx('avatar')} src="https://cornerstoneia.com/wp-content/uploads/2019/08/avatar-placeholder.jpeg" alt='avatar'></img>
                         <div className={cx('left-info')}>
                             <div className={cx('about')}>
                                 <h3>Chức vụ:</h3>
-                                <p>{u.EmployeePositon}</p>
+                                <p>{u.EmployeePosition}</p>
                             </div>
                         </div>
                     </div>

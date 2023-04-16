@@ -3,6 +3,7 @@ import styles from './Trip.module.css'
 import { IoHome } from "react-icons/io5";
 import { GrFormNext } from "react-icons/gr";
 import { useEffect, useState } from 'react'
+import Calendar from '../../component/Calendar';
 
 const cx = classNames.bind(styles)
 
@@ -16,6 +17,21 @@ function Trip() {
     const [endDate, setEndDate] = useState('')
     const [tripdlt, setTripdlt] = useState('')
     const [listTrip, setListTrip] = useState([])
+    const [listBus, setListBus] = useState([])
+    const [getAllBusId, setGetAllBusId] = useState([])
+    const [getCurBusId, setGetCurBusId] = useState([])
+    const [getEmpBusId, setGetEmpBusId] = useState([])
+
+    const [caledarStartValue, setCaledarStartValue] = useState('')
+    const [caledarEndValue, setCaledarEndValue] = useState('')
+
+    const handleCalendarStartChange = (element, currentStartValue) => {
+        setCaledarStartValue(currentStartValue)
+    }    
+
+    const handleCalendarEndChange = (element, currentEndValue) => {
+        setCaledarEndValue(currentEndValue)
+    }
 
     const getListTrip = () => {
         fetch(`http://127.0.0.1:8000/trip`)
@@ -27,6 +43,12 @@ function Trip() {
 
     useEffect(() => {
         getListTrip()
+
+        fetch(`http://127.0.0.1:8000/bus`)
+            .then((res) => res.json())
+            .then((res) => {
+                setListBus(res)
+            })
     }, [])
 
     useEffect(() => {
@@ -43,7 +65,6 @@ function Trip() {
                 .then((res) => res.json())
                 .then((res) => {
                     alert("Thêm chuyến thành công")
-                    console.log(trip)
                     getListTrip()
                 })
         }
@@ -69,14 +90,33 @@ function Trip() {
 
     const handleAddBus = () => {
         setTrip({
-            TripId: tripId,
-            BusId: busId,
+            id: tripId,
+            busId: busId,
             StartPoint: startPoint,
-            StartDate: startDate,
+            StartDate: `${caledarStartValue.slice(0, 10)}T${startDate}:00Z`,
             EndPoint: endPoint,
-            EndDate: endDate
+            EndDate: `${caledarEndValue.slice(0, 10)}T${endDate}:00Z`
         })
     }
+
+    useEffect(() => {
+        let busList = []
+        listBus.forEach((itemBus) => {
+            busList.push(itemBus.id)
+        })
+        setGetAllBusId(busList)
+
+        let tripList = []
+        listTrip.forEach((itemTrip) => {
+            tripList.push(itemTrip.busId)
+        })
+        setGetCurBusId(tripList)
+    }, [tripId])
+
+    useEffect(() => {
+        const filteredSeat = getAllBusId.filter(getAllBusId => !getCurBusId.includes(getAllBusId))
+        setGetEmpBusId(filteredSeat)
+    }, [getAllBusId])
 
     return (
         <div>
@@ -85,9 +125,13 @@ function Trip() {
                 <input required className={cx('input-info')} placeholder="Mã chuyến.."
                     value={tripId} onChange={e => { setTripId(e.target.value) }}
                 />
-                <input className={cx('input-info')} placeholder="Mã xe khách.."
-                    value={busId} onChange={e => { setBusId(e.target.value) }}
-                />
+                <select className={cx('input-info')} value={busId} onChange={e => setBusId(e.target.value)}>
+                    <option value=''>-- Chọn xe --</option>
+                    {tripId &&
+                        getEmpBusId.map(empBus => (
+                            <option key={empBus}>{empBus}</option>
+                        ))}
+                </select>
             </div>
             <div className={cx('block')}>
                 <input className={cx('input-info')} placeholder="Điểm đón..."
@@ -111,6 +155,40 @@ function Trip() {
                     />
                 </div>
             </div>
+            {/* <div className={cx('block')}>
+                <div>
+                    <label>Ngày đón:</label>
+                    <input className={cx('time')} ref={caledarStartRef} />
+                </div>
+                <div>
+                    <label className={cx('time-end')}>Ngày đến:</label>
+                    <input className={cx('time', 'time-end')} ref={caledarEndRef} />
+                </div>
+            </div> */}
+            <div className={cx('block')}>
+                <div>
+                    <label>Ngày đón:</label>
+                    <Calendar
+                        options={{
+                            value: caledarStartValue,
+                            onchange: handleCalendarStartChange,
+                            readonly: false,
+                            placeholder: 'Chọn ngày đón...'
+                        }}
+                    />
+                </div>
+                <div>
+                    <label>Ngày đến:</label>
+                    <Calendar
+                        options={{
+                            value: caledarEndValue,
+                            onchange: handleCalendarEndChange,
+                            readonly: false,
+                            placeholder: 'Chọn ngày đến...'
+                        }}
+                    />
+                </div>
+            </div>
             <div className={cx('block')}>
                 <button className={cx('btn-pro5')} onClick={handleAddBus}>Thêm chuyến</button>
             </div>
@@ -126,15 +204,15 @@ function Trip() {
                     <li className={cx('table-item')}>Thao tác</li>
                 </ul>
                 {listTrip.map(itemTrip => (
-                    <ul className={cx('table-list')} key={itemTrip.TripId}>
-                        <li className={cx('table-item')}>{itemTrip.TripId}</li>
-                        <li className={cx('table-item')}>{itemTrip.BusId}</li>
+                    <ul className={cx('table-list')} key={itemTrip.id}>
+                        <li className={cx('table-item')}>{itemTrip.id}</li>
+                        <li className={cx('table-item')}>{itemTrip.busId}</li>
                         <li className={cx('table-item')}>{itemTrip.StartPoint}</li>
                         <li className={cx('table-item')}>{itemTrip.EndPoint}</li>
-                        <li className={cx('table-item')}>{itemTrip.StartDate}</li>
-                        <li className={cx('table-item')}>{itemTrip.EndDate}</li>
+                        <li className={cx('table-item')}>{itemTrip.StartDate.slice(11, 16)}<br/>(Ngày {itemTrip.StartDate.slice(8, 10)}-{itemTrip.StartDate.slice(5, 7)}-{itemTrip.StartDate.slice(0, 4)})</li>
+                        <li className={cx('table-item')}>{itemTrip.EndDate.slice(11, 16)}<br/>(Ngày {itemTrip.StartDate.slice(8, 10)}-{itemTrip.StartDate.slice(5, 7)}-{itemTrip.StartDate.slice(0, 4)})</li>
                         <li className={cx('table-item')}>
-                            <button className={cx('btn-delete')} onClick={() => setTripdlt(itemTrip.TripId)}>Xoá</button>
+                            <button className={cx('btn-delete')} onClick={() => setTripdlt(itemTrip.id)}>Xoá</button>
                         </li>
                     </ul>
                 ))}

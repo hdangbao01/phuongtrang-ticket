@@ -1,0 +1,11 @@
+.style {
+    width: 400px;
+    flex: 1;
+    height: 40px;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 0px 10px;
+    font-size: 1.4rem;
+    margin-right: 20px;
+}

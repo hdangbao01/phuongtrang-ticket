@@ -65,14 +65,12 @@ function Ticket() {
         if (ticket) {
             fetch(`http://127.0.0.1:8000/ticket`, options)
                 .then((res) => res.json())
-                .then(() => {
-                    alert("Them ve thanh cong")
+                .then((res) => {
+                    alert("Thêm vé thành công")
                     getListTicket()
-                    setTrip('')
-                    setName('')
-                    setPhone('')
-                    setSeat('')
-                    setPay('')
+                })
+                .catch((res) => {
+                    alert("Thêm vé thất bại")
                 })
         }
     }, [ticket])
@@ -98,17 +96,21 @@ function Ticket() {
     const handleAddTicket = () => {
         const today = new Date()
 
-        var date = today.getDate() + '/' + (today.getMonth() + 1)
+        const date = today.getDate()
+        const month = today.getMonth() + 1
+        const year = today.getFullYear()
+        const hour = today.getHours()
+        const minutes = today.getMinutes()
 
         setTicket({
-            TripId: trip,
+            tripId: Number(trip),
             PassengerName: name,
-            PassengerPhone: phone,
+            PassengerPhone: Number(phone),
             SeatNumber: seat,
-            Price: "1000000",
+            Price: 1000.0,
             Payment: pay,
-            DataOfPurchase: date,
-            EmployeeId: userLogin[0].EmployeeName
+            DateOfPurchase: `${year}-0${month}-${date}T${hour}:${minutes}:00Z`,
+            employeeId: Number(userLogin[0].id)
         })
     }
 
@@ -117,8 +119,12 @@ function Ticket() {
     }
 
     useEffect(() => {
+        const getTrip = listTrip.find(itemTrip => {
+            return itemTrip.id == trip
+        })
+
         const seatCur = listBus.find(itemBus => {
-            return itemBus.BusId == trip
+            return itemBus.id == getTrip.busId
         })
 
         if (seatCur) {
@@ -126,7 +132,7 @@ function Ticket() {
 
             let seatList = []
             const tripCurs = listTicket.filter(itemTicket => {
-                return itemTicket.TripId == trip
+                return itemTicket.tripId == trip
             })
             tripCurs.forEach((tripCur) => {
                 seatList.push(tripCur.SeatNumber)
@@ -153,11 +159,12 @@ function Ticket() {
             <p className={cx('contact-header')}><IoHome className={cx('contact-icon')} /> <GrFormNext /> Quản lý vé xe</p>
             <div className={cx('block-trip')}>
                 {listTrip.map(itemTrip => (
-                    <p className={cx('trip')} key={itemTrip.BusId}><span>* Chuyến {itemTrip.TripId}:</span><br />
+                    <p className={cx('trip')} key={itemTrip.id}><span>* Chuyến {itemTrip.id}:</span><br />
                         - Địa điểm đón: {itemTrip.StartPoint}<br />
                         - Địa điểm đến: {itemTrip.EndPoint}<br />
-                        - Giờ xuất phát: {itemTrip.StartDate}<br />
-                        - Giờ đến: {itemTrip.EndDate}<br />
+                        - Ngày khởi hành: {itemTrip.StartDate.slice(8, 10)}-{itemTrip.StartDate.slice(5, 7)}-{itemTrip.StartDate.slice(0, 4)}<br />
+                        - Giờ xuất phát: {itemTrip.StartDate.slice(11, 16)}<br />
+                        - Giờ đến: {itemTrip.EndDate.slice(11, 16)}
                     </p>
                 ))}
             </div>
@@ -169,7 +176,7 @@ function Ticket() {
                 <select className={cx('input-info')} value={trip} onChange={e => handleSeclectTrip(e)}>
                     <option value=''>-- Chọn chuyến xe --</option>
                     {listTrip.map(itemTrip => (
-                        <option key={itemTrip.BusId} value={itemTrip.BusId}>{`Chuyến ${itemTrip.BusId} (${itemTrip.StartPoint} - ${itemTrip.EndPoint})`}</option>
+                        <option key={itemTrip.id} value={itemTrip.id}>{`Chuyến ${itemTrip.id} (${itemTrip.StartPoint} - ${itemTrip.EndPoint})`}</option>
                     ))}
                 </select>
                 <select className={cx('input-info')} value={seat} onChange={e => setSeat(Number(e.target.value))}>
@@ -201,16 +208,16 @@ function Ticket() {
                     <li className={cx('table-item')}>Thao tác</li>
                 </ul>
                 {listTicket.map(itemTicket => (
-                    <ul className={cx('table-list')} key={itemTicket.TicketId}>
-                        <li className={cx('table-item')}>{itemTicket.TicketId}</li>
+                    <ul className={cx('table-list')} key={itemTicket.id}>
+                        <li className={cx('table-item')}>{itemTicket.id}</li>
                         <li className={cx('table-item')}>{itemTicket.PassengerName}</li>
                         <li className={cx('table-item')}>{itemTicket.PassengerPhone}</li>
-                        <li className={cx('table-item')}>{itemTicket.TripId}</li>
+                        <li className={cx('table-item')}>{itemTicket.tripId}</li>
                         <li className={cx('table-item')}>{itemTicket.SeatNumber}</li>
                         <li className={cx('table-item')}>{itemTicket.Payment}</li>
-                        <li className={cx('table-item')}>{itemTicket.EmployeeId}</li>
+                        <li className={cx('table-item')}>{itemTicket.employeeId}</li>
                         <li className={cx('table-item')}>
-                            <button className={cx('btn-delete')} onClick={() => setTicketdlt(itemTicket.TicketId)}>Xoá</button>
+                            <button className={cx('btn-delete')} onClick={() => setTicketdlt(itemTicket.id)}>Xoá</button>
                         </li>
                     </ul>
                 ))}
