@@ -15,9 +15,10 @@ function Employee() {
     const [salary, setSalary] = useState('')
     const [employeedlt, setEmployeedlt] = useState('')
     const [listEmployee, setListEmployee] = useState([])
+    const sv = localStorage.getItem("sv")
 
     const getListEmployee = () => {
-        fetch(`http://127.0.0.1:8000/employee`)
+        fetch(`http://127.0.0.1:800${sv}/employee`)
             .then((res) => res.json())
             .then((res) => {
                 setListEmployee(res)
@@ -38,7 +39,7 @@ function Employee() {
         }
 
         if (employee) {
-            fetch(`http://127.0.0.1:8000/employee`, options)
+            fetch(`http://127.0.0.1:800${sv}/employee`, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert("Thêm nhân viên thành công")
@@ -56,7 +57,7 @@ function Employee() {
         }
 
         if (employeedlt) {
-            fetch('http://127.0.0.1:8000/employee/' + employeedlt, options)
+            fetch(`http://127.0.0.1:800${sv}/employee/` + employeedlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xóa nhân viên ${employeedlt} thành công`)

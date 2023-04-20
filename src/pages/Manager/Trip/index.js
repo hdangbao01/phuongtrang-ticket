@@ -21,6 +21,7 @@ function Trip() {
     const [getAllBusId, setGetAllBusId] = useState([])
     const [getCurBusId, setGetCurBusId] = useState([])
     const [getEmpBusId, setGetEmpBusId] = useState([])
+    const sv = localStorage.getItem("sv")
 
     const [caledarStartValue, setCaledarStartValue] = useState('')
     const [caledarEndValue, setCaledarEndValue] = useState('')
@@ -34,7 +35,7 @@ function Trip() {
     }
 
     const getListTrip = () => {
-        fetch(`http://127.0.0.1:8000/trip`)
+        fetch(`http://127.0.0.1:800${sv}/trip`)
             .then((res) => res.json())
             .then((res) => {
                 setListTrip(res)
@@ -44,7 +45,7 @@ function Trip() {
     useEffect(() => {
         getListTrip()
 
-        fetch(`http://127.0.0.1:8000/bus`)
+        fetch(`http://127.0.0.1:800${sv}/bus`)
             .then((res) => res.json())
             .then((res) => {
                 setListBus(res)
@@ -61,7 +62,7 @@ function Trip() {
         }
 
         if (trip) {
-            fetch(`http://127.0.0.1:8000/trip`, options)
+            fetch(`http://127.0.0.1:800${sv}/trip`, options)
                 .then((res) => res.json())
                 .then((res) => {
                     alert("Thêm chuyến thành công")
@@ -79,7 +80,7 @@ function Trip() {
         }
 
         if (tripdlt) {
-            fetch('http://127.0.0.1:8000/trip/' + tripdlt, options)
+            fetch(`http://127.0.0.1:800${sv}/trip/` + tripdlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoá chuyến ${tripdlt} thành công`)

@@ -13,9 +13,10 @@ function Bus() {
     const [type, setType] = useState('')
     const [busdlt, setBusdlt] = useState('')
     const [listBus, setListBus] = useState([])
+    const sv = localStorage.getItem("sv")
 
     const getListBus = () => {
-        fetch(`http://127.0.0.1:8000/bus`)
+        fetch(`http://127.0.0.1:800${sv}/bus`)
             .then((res) => res.json())
             .then((res) => {
                 setListBus(res)
@@ -36,7 +37,7 @@ function Bus() {
         }
 
         if (bus) {
-            fetch(`http://127.0.0.1:8000/bus`, options)
+            fetch(`http://127.0.0.1:800${sv}/bus`, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert("Them xe thanh cong")
@@ -54,7 +55,7 @@ function Bus() {
         }
 
         if (busdlt) {
-            fetch('http://127.0.0.1:8000/bus/' + busdlt, options)
+            fetch(`http://127.0.0.1:800${sv}/bus/` + busdlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoa ve ${busdlt} thanh cong`)

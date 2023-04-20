@@ -22,9 +22,10 @@ function Ticket() {
     const [listSeatEmp, setListSeatEmp] = useState([])
     const [tripArr, setTripArr] = useState([])
     const [ticketdlt, setTicketdlt] = useState('')
+    const sv = localStorage.getItem("sv")
 
     const getListTicket = () => {
-        fetch(`http://127.0.0.1:8000/ticket`)
+        fetch(`http://127.0.0.1:800${sv}/ticket`)
             .then((res) => res.json())
             .then((res) => {
                 setListTicket(res)
@@ -34,19 +35,19 @@ function Ticket() {
     useEffect(() => {
         getListTicket()
 
-        fetch(`http://127.0.0.1:8000/employee`)
+        fetch(`http://127.0.0.1:800${sv}/employee`)
             .then((res) => res.json())
             .then((res) => {
                 setUserLogin(res)
             })
 
-        fetch(`http://127.0.0.1:8000/trip`)
+        fetch(`http://127.0.0.1:800${sv}/trip`)
             .then((res) => res.json())
             .then((res) => {
                 setListTrip(res)
             })
 
-        fetch(`http://127.0.0.1:8000/bus`)
+        fetch(`http://127.0.0.1:800${sv}/bus`)
             .then((res) => res.json())
             .then((res) => {
                 setListBus(res)
@@ -63,7 +64,7 @@ function Ticket() {
         }
 
         if (ticket) {
-            fetch(`http://127.0.0.1:8000/ticket`, options)
+            fetch(`http://127.0.0.1:800${sv}/ticket`, options)
                 .then((res) => res.json())
                 .then((res) => {
                     alert("Thêm vé thành công")
@@ -84,7 +85,7 @@ function Ticket() {
         }
 
         if (ticketdlt) {
-            fetch('http://127.0.0.1:8000/ticket/' + ticketdlt, options)
+            fetch(`http://127.0.0.1:800${sv}/ticket/` + ticketdlt, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert(`Xoa ve ${ticketdlt} thanh cong`)

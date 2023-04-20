@@ -12,9 +12,10 @@ function Profile() {
     const [users, setUsers] = useState([])
     const [idUser, setIdUser] = useState('')
     const user = localStorage.getItem("user");
+    const sv = localStorage.getItem("sv")
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:8000/employee`)
+        fetch(`http://127.0.0.1:800${sv}/employee`)
             .then(res => res.json())
             .then(res => {
                 setUsers(res)
@@ -32,7 +33,7 @@ function Profile() {
         }
 
         if (infor) {
-            fetch(`http://127.0.0.1:8000/employee`, options)
+            fetch(`http://127.0.0.1:800${sv}/employee`, options)
                 .then((res) => res.json())
                 .then(() => {
                     alert("Sửa thông tin thành công")
